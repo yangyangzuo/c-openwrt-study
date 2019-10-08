@@ -1,0 +1,30 @@
+路由器硬件构成:
+    cpu:
+        Atheros/QualCom高通,
+        BroadCom博通
+        MediaTek联发科
+        RealTek瑞昱
+    RAM:
+        SDRAM,DDR,DDR2,DDR3
+    ROM(Flash):
+        串口:SPI Flash
+        并口:NOR Flash(不容易坏),NAND flash(u盘用的较多,容易坏),
+    WIFI(芯片):
+        usb总线
+        pci-e总线
+    
+
+路由器的软件构成:
+    BootLoader:
+        CFE:Common Firmware Environment
+        Uboot:Universal Boot Loader
+
+
+    固件:
+        开源系统: Openwrt, Tomoto, DD-WRT
+        闭源系统:
+            芯片厂商系统:高通QSDK和LSDK,联发科的ECOS等
+            第三方系统:
+                VxWorks系统: TP-Link
+                基于类Unix系统(linux,bsd)开发:优倍网络(UBNT)Airos,MikroTik RouterOS(ROS)
+                基于开源系统修改

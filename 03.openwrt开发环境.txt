@@ -30,7 +30,7 @@
                     
                 Use the build system to compile a firmware image
                     https://openwrt.org/docs/guide-developer/build-system/use-buildsystem
-                    3.
+                    3. 
 
 
 

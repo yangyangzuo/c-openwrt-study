@@ -1,0 +1,121 @@
+路由器硬件构成:
+    cpu:
+        Atheros/QualCom高通(Atheros被QualCom高通收购)
+        BroadCom博通
+        MediaTek联发科
+        RealTek瑞昱
+
+        cpu芯片一般内部集成交换机芯片(早起的交换机芯片一般时外挂的，现在大部分都时集成的)
+        内置2.4Gwifi芯片
+        5Gwifi芯片一般都是外挂芯片(单独一个芯片)
+
+
+    RAM/内存:
+        以前的:SDRAM
+        主流:DDR,DDR2,DDR3
+
+        例如：
+            winbond(华邦电子创立于1987年9月，1995年正式于台湾证券交易所挂牌上市，目前已成为中国台湾最大的自有产品IC公司)
+            背面字母:
+                w9751G6KB-25
+                64468U900ZX2
+                507HUA  TWN
+
+
+
+    ROM(Flash)/硬盘:
+        串口:SPI Flash(工业用的比较多,有单双工,速度不是很快,因此不可能做的很大)
+        并口:NOR Flash(不容易坏,以前的路由器使用较多,但是现在几乎不用),NAND flash(u盘用的较多,现在的路由器用的较多,容易坏),
+        市场上路由器用的最多的时spi flash(因为便宜,几毛钱)
+        容量:一般8MB-32MB
+        根据电平分为:
+            ttl电平
+            cmos电平
+            两种电平区别:
+                http://m.elecfans.com/article/1055235.html
+            简单的进行理解的话， 
+                TTL的电源工作电压是5V ，所以TTL的电平是根据电源电压5V来定的。
+                CMOS电平， CMOS的电源I作电压是3V-18V ， CMOS的电源工作电压范围宽，如果CMOS的电源工作电压是12V ，那么这个CMOS的输入输出电平电压要符合12V的输入输出要求。
+                即CMOS的电平，要看用的电源工作电压是多少， 3v-18V ，都在CMOS的电源工作电压范围内，具体数值，看加在CMOS芯片上的电源工作电压是多少。    
+
+
+        不同种类的flash对固件和bootloader开发影响有多大?
+            对于开发基本没有影响,主要是运行时性能有影响
+
+
+
+
+
+
+    WIFI(芯片):
+        usb总线
+
+        pci-e总线:
+            例如:
+                MediaTek联发科5G芯片:(MT7612EN)
+                MT7612/MT7612E/MT7612U/MT7612A/MT7612EN/MT7612UN是一款高度整合式Wi-Fi单芯片，支持866 Mbps PHY速率。它完全符合IEEE 802.11ac标准，提供高标准而功能丰富的无线连接，并可从更远的距离提供可靠稳定、具成本效益的处理能力
+
+                MT7612EN芯片背面字母:
+                    MEDIATEK
+                    MT7612EN
+                    1438-BMAL
+                    DTP0VX20
+
+    
+
+路由器的软件构成:
+    BootLoader(引导程序):
+        CFE:Common Firmware Environment (30%在使用,博通用的比较多)
+        Uboot:Universal Boot Loader (70%在使用),主要应用:gpio/复位键/led灯
+
+        bootloader存储在哪个位置:
+            bootloader(引导程序)存储在flash的头部,头部以下放操作系统(固件/Firmware/操作系统)
+
+
+    固件(Firmware)/操作系统:
+        开源系统: Openwrt(x86/mtk), Tomoto(bcn), DD-WRT(x86)
+        闭源系统:
+            芯片厂商系统(需要签订保密协议):高通QSDK和LSDK,联发科的ECOS等
+            第三方系统:
+                VxWorks系统: TP-Link使用较多
+                基于类Unix系统(linux,bsd)开发:优倍网络(UBNT)Airos,MikroTik RouterOS(ROS)
+                基于开源系统修改: 自制固件
+
+
+    bootloader和firmware哪个在ram里面哪个在rom里面?
+    运行时都时在加载到内存中(ram)
+    存储时都是在闪存中(rom)，bootloader(引导程序)存储在flash的头部,头部以下放操作系统(固件/Firmware/操作系统)
+
+
+openwrt的运行环境要求?
+    基本上能跑linux就能跑openwrt,(需要芯片支持)只是移植问题
+
+
+如何提升系统性能，硬件方面可做哪些升级？
+是否可以多核?
+增加内存，挂固态硬盘是否有用
+    基本没有升级空间，路由器升级很难
+
+
+
+openwrt,dd-wrt,tomato系统的区别?
+    openwrt(美国人开发),比较open
+    DD-WRT(欧洲人开发),中规中矩
+    tomato(日本人开发),比较精致
+
+
+
+
+
+
+现在很多的cpu(soc)都内置了switch(交换机)芯片，如果路由器完全成砖,比如:spi/nand芯片都没了还能作为交换机用吗?
+    可以
+    switch(交换机芯片时独立的，即使没有ram和rom也可以工作)
+
+
+openwrt,tomato,dd-wrt三种系统对应什么样的cpu?
+    openwrt:支持的处理器有QCA，BroadCom博通,Atheros，MTK，X86，Cavium，Ralink，Marvel，几乎常见的Soc芯片都支持
+    dd-wrt:支持的处理器有QCA，BroadCom博通,MTK，X86等
+    tomato:支持的处理器有BroadCom博通,MTK
+
+

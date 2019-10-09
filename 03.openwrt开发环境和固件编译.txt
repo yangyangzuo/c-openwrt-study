@@ -1,4 +1,4 @@
-这里以斐讯 k1(psg1208)为例:
+这里以斐讯phicomm k1(psg1208) A1版 为例:
 http://www.phicomm.com/cn/index.php/Products/family_spec/cateid/9/id/1.html
 硬件规格
     协议标准：
@@ -66,6 +66,67 @@ http://www.phicomm.com/cn/index.php/Products/family_spec/cateid/9/id/1.html
         5% 到 90%RH 不凝结
 
 
+官网并没有列出硬件相关信息:
+华强芯城:http://www.hqchip.com/
+
+网上查的cpu:
+    CPU型号：
+        MEDIATek MT7620A ver 2，eco 6
+        MT7620A是一款SOC芯片，也就是常说的的“片上系统”，顾名思义，这款芯片集成了CPU、Baseband、Radio等功能
+        https://www.mediatek.com/products/homeNetworking/mt7620n-a
+
+    内存：
+        64MB DDR2
+        拆开后盖,找到内存芯片
+        winbond(华邦)
+        w 97 51 G6 KB-25
+        64468U900ZX2
+        507HUA  TWN 
+
+        搜索:W9751G6KB-25
+        http://www.hqchip.com/p/W9751G6KB-25.html
+
+        封装/外壳   84-TFBGA
+        存储器类型	 易失
+        存储容量	512Mb(64MB)（32Mx16）
+        电源电压	1.7V~1.9V
+        存储器格式	DRAM
+
+        详细资料:
+            http://www.winbond.com/resource-files/da00-w9751g6kbg1.pdf
+
+
+
+
+        怎么读?
+        Winbond(华邦)存储芯片的编号和现代差不多，其编号规格为：
+        W <12> <34> <56> <78>
+
+        W代表Winbond；
+        <12>代表显存类型，98为SDRAM，94为DDRRAM；
+        <34>代表颗粒的容量（08=8Mbits，16=16Mbits，64=64Mbits，12=128Mbits，25=256Mbits）
+        <56>代表颗粒的位宽（16=16bit，32=32bit，G6=16bitBGA封装，G2=32bitBGA封装 ）
+        <78>代表颗粒的版本号和封装（7代表版本号，常见的版本号为B和H；8代表封装，H为TSOP封装，B为BGA封装，D为LQFP封装）
+
+
+    FLASH：8MB
+  
+
+
+
+
+硬件要求:
+https://openwrt.org/supported_devices
+
+General requirements for OpenWrt support
+    1.SoC / target supported by OpenWrt
+    2.Sufficient Flash to accommodate OpenWrt firmware image
+        4MB min (won't be able to install GUI (LuCI))
+        8MB better (will fit GUI and some other applications)
+    3.Sufficient RAM for stable operation
+        32MB min, 
+        64MB better
+
 
 
 1.安装ubuntu系统
@@ -122,26 +183,41 @@ http://www.phicomm.com/cn/index.php/Products/family_spec/cateid/9/id/1.html
                         m设置<M>,包被编译，但是不会包含到固件中
                         n设置< >,源码不会被处理(不会被编译)
 
-                        首先选择target system，enter进入
-                        这里我们的芯片是 
-                        然后选择 subtarget
-                        然后在target profile中找到设备对应的平台
+                        首先选择target system(选择厂商品牌)，enter进入
+                            这里我们的芯片是 mediatec MT7620A,
+                            所以选择mediatek ralink mips
+                        然后选择 subtarget(选择芯片),enter进入
+                            选择mt7620
+                        然后在target profile的支持平台列表中查找对应的设备型号
+                            选择phicomm psg1208(如果选择了default profile,则所有支持设备都会编译)
 
-
-        编译中的误区:
-            make -jN 
-            提高多核心的cup利用率
-            例如:make -j5
-            (在一个4核心的cpu上进行编译)
-
-
-
-
+                        可选:
+                            选择luCI,回车进去 
+                            Collections ---> 再回车进去
+                            再空格选择第一个<*> luci（new）,
+                            然后在Exit一路后退到主菜单
+                        右方向键，选择exit退出，保存
 
 
 
 3.编译系统
     make V=99
+
+    V表示verbose,啰嗦模式/冗长模式，会把日志过程打印出来
+
+
+
+
+
+
+
+编译中的误区:
+    make -jN 
+    提高多核心的cup利用率
+    例如:make -j5
+    (在一个4核心的cpu上进行编译)
+
+
 
 
 

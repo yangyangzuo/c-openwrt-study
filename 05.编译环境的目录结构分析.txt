@@ -1,0 +1,28 @@
+openwrt是基于buildRoot项目开发的
+buildroot主要功能:
+    toolchain(交叉编译工具链)
+    rootfs
+    kernel
+buildroot相关的项目busybox(瑞士军刀)
+
+
+
+
+
+
+
+编译后的目录结构:
+    bin/packages:
+    bin/targets/ramips:固件编译完成后的目录
+    bin/targets/ramips/packages:ipk包文件
+    config
+    dl:编译时的下载目录
+    feeds:feeds install命令执行时下载的第三方包
+    include:
+    package:
+    scripts:
+    staging_dir:
+    target:
+    tmp:
+    toolchain:
+    tools:

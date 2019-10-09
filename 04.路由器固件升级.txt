@@ -1,0 +1,69 @@
+cpu芯片厂商使用的bootloader:
+
+    cfe:
+        市场占20-30%
+        BroadCom博通:
+
+    uboot:
+        市场占70-80%
+        
+        (QualCom收购Atheros)qca高通的uboot分为:
+            kernel
+            rootfs(root file system)
+            官方手册提示:需要单独使用tftp去升级
+
+        mtk联发科的uboot比较简单
+            kernel和rootfs合并为单独的一个打包好的bin文件即可
+
+
+
+
+
+
+
+
+
+变砖:
+    固件损坏,不能启动
+修砖:
+    此时需要使用bootloader(uboot/cfe)去升级
+
+
+
+
+
+
+1.通过固件升级
+    web方式上传固件
+
+
+
+
+
+
+
+
+
+2.通过(bootloader)uboot方式升级固件
+
+如何升级?
+    1.路由器主板上焊接TTL引脚(排针)
+        杜邦头/杜邦线
+        准备usb-TTl数据线一条(5-20元)(pl2303)
+        买回来的线要把vcc减掉(红色的),否则会烧usb
+
+    2.安装串口,tftpd工具:
+        ubuntu下使用minicom,tftpd-hpa
+        win下使用putty,tftpd32/64
+
+    3.虚拟机设置
+        虚拟机usb共享
+        调整细腻及的网卡设置,增加网卡然后设置为桥接
+
+
+
+
+ 
+
+
+

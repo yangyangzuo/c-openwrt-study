@@ -1,0 +1,184 @@
+这里以斐讯 k1(psg1208)为例:
+http://www.phicomm.com/cn/index.php/Products/family_spec/cateid/9/id/1.html
+硬件规格
+    协议标准：
+        IEEE 802.11n、IEEE 802.11g、IEEE 802.11b、IEEE 802.11ac  IEEE 802.3、IEEE 802.3u
+    端口：
+        1个10/100M自适应WAN口
+        4个10/100M自适应LAN口
+    按钮：
+        1个Wi-Fi/Reset/WPS复用开关
+    天线：
+        4根5dBi高增益全向天线
+    指示灯：
+        Power,2.4G Wi-Fi,5G Wi-Fi,WPS,WAN,LAN（1-4）
+    尺寸：
+        200×140×30mm
+无线参数
+    无线速率：
+        无线速率：最高1200Mbps
+        2.4G：300Mbps
+        5G：867Mbps
+    工作频段：
+        2.4GHz / 5GHz
+    信道选择：
+        2.4GHz 信道选择：1-13
+        5GHz信道选择：5个信道
+    基本功能：
+        无线开关
+        无线网络名称（SSID）广播开关
+        多SSID
+    无线安全：
+        无线安全功能开关
+        WEP、WPA-PSK、WPA2-PSK、WPA/WPA2-PSK
+        WPS
+        无线MAC地址过滤
+软件功能
+    WAN接入方式：
+        PPPoE、动态IP、静态IP
+    拨号方式：
+        自动拨号、按需拨号、手动拨号
+    安全设置：
+        IP地址过滤、端口过滤、域名过滤、
+        MAC地址过滤、远程WEB管理
+    实用功能：
+        支持DDNS、支持VPN穿透、带宽控制、
+        系统日志、端口转发、虚拟服务器、
+        DMZ主机
+    特色功能：
+        智能调节无线信号强度，免去辐射后顾之忧
+        智能APP管理，路由器配置管理更简单
+    其它功能：
+        配置文件导入与导出、Web软件升级
+        DHCP服务器、客户端列表、静态地址分配
+其他
+    包装配件：
+        路由器 x 1
+        电源适配器 x 1
+        快速安装指南 x 1
+    使用环境：
+        工作温度：0℃ 到 40℃
+    存储温度：
+        -40℃到 70℃
+    工作湿度：
+        10% 到 90%RH 不凝结
+    存储湿度：
+        5% 到 90%RH 不凝结
+
+
+
+
+1.安装ubuntu系统
+2.下载openwrt源码
+    创建目录study
+    切换到目录study
+    clone源码:
+
+        获取源码:
+            https://openwrt.org/downloads
+            -->
+            Source code: Git repositories
+                https://git.openwrt.org/
+            或者
+                https://github.com/openwrt/openwrt
+
+
+
+        编译过程:
+            https://openwrt.org/downloads -> Build your own firmware -> here
+
+            Documentation:
+                Install the build system on the host:
+                    https://openwrt.org/docs/guide-developer/build-system/install-buildsystem
+                    1.安装相关编译包,页面中查找Ubuntu 18.04 LTS(19.04安装如下包也可以正常编译)
+                    sudo apt-get install subversion build-essential libncurses5-dev zlib1g-dev gawk git ccache gettext libssl-dev xsltproc zip
+                    makdir study
+                    cd study
+                    2.git clone https://git.openwrt.org/openwrt/openwrt.git
+                    cd openwrt(源码目录)
+                    执行make menuconfig，测试相关的包是否安装完备
+                    
+                Use the build system to compile a firmware image
+                    https://openwrt.org/docs/guide-developer/build-system/use-buildsystem
+                    3.正式编译
+                        1.更新和安装feeds(第三方的包/非官方的包)
+                            源码目录/feeds目录(第三方的包)
+                            源码目录/package目录(官方的包)
+                            
+                            
+                            更新feeds
+                            ./scripts/feeds update -a
+
+                            使第三方的包在make menuconfig的时候可用，而不是真正的安装和编译第三方包
+                            安装所有的包(包被安装在 源码目录/feeds目录)
+                            ./scripts/feeds install -a
+                            
+
+                            这个时候你再执行make menuconfig,就会发现安装的第三方的包都显示了，例如:luci
+                        2.镜像配置
+                        make menuconfig
+
+                        y设置<*>,包被编译并包含到固件中
+                        m设置<M>,包被编译，但是不会包含到固件中
+                        n设置< >,源码不会被处理(不会被编译)
+
+                        首先选择target system，enter进入
+                        这里我们的芯片是 
+                        然后选择 subtarget
+                        然后在target profile中找到设备对应的平台
+
+
+        编译中的误区:
+            make -jN 
+            提高多核心的cup利用率
+            例如:make -j5
+            (在一个4核心的cpu上进行编译)
+
+
+
+
+
+
+
+3.编译系统
+    make V=99
+
+
+
+
+
+
+feeds命令的使用：
+    切换到源码目录/scripts,可以看到feeds脚本文件
+    执行:./feeds得到如下信息
+    Commands:
+	list [options]: List feeds, their content and revisions (if installed)
+	Options:
+	    -n :            List of feed names.
+	    -s :            List of feed names and their URL.
+	    -r <feedname>:  List packages of specified feed.
+	    -d <delimiter>: Use specified delimiter to distinguish rows (default: spaces)
+	    -f :            List feeds in feeds.conf compatible format (when using -s).
+
+	install [options] <package>: Install a package
+	Options:
+	    -a :           Install all packages from all feeds or from the specified feed using the -p option.
+	    -p <feedname>: Prefer this feed when installing packages.
+	    -d <y|m|n>:    Set default for newly installed packages.
+	    -f :           Install will be forced even if the package exists in core OpenWrt (override)
+
+	search [options] <substring>: Search for a package
+	Options:
+	    -r <feedname>: Only search in this feed
+
+	uninstall -a|<package>: Uninstall a package
+	Options:
+	    -a :           Uninstalls all packages.
+
+	update -a|<feedname(s)>: Update packages and lists of feeds in feeds.conf .
+	Options:
+	    -a :           Update all feeds listed within feeds.conf. Otherwise the specified feeds will be updated.
+	    -i :           Recreate the index only. No feed update from repository is performed.
+	    -f :           Force updating feeds even if there are changed, uncommitted files.
+
+	clean:             Remove downloaded/generated files.

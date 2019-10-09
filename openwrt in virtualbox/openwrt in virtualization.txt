@@ -1,0 +1,22 @@
+虚拟化技术(在虚拟机中运行或者编译openwrt):
+virtualization : running or building openwrt in virtualization
+
+官网地址:
+https://wiki.openwrt.org/doc/howto/start
+---> advanced topics ---> virtualization
+https://wiki.openwrt.org/doc/howto/virtualization
+
+
+
+//如何在下面4中虚拟机中运行openwrt
+1. openwrt on vmware (https://wiki.openwrt.org/doc/howto/vmware)
+2. openwrt on xen (https://wiki.openwrt.org/doc/howto/xen)
+3. openwrt on qemu (https://wiki.openwrt.org/doc/howto/qemu)
+4. openwrt on virtualbox (https://wiki.openwrt.org/doc/howto/virtualbox)
+
+
+//在virtualbox编译openwrt
+在虚拟机中安装操作系统,然后在操作系统中编译openwrt
+https://wiki.openwrt.org/doc/howto/buildvm
+
+

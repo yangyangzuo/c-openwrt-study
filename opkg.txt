@@ -1,0 +1,33 @@
+opkg:
+	使用说明:
+	https://wiki.openwrt.org/doc/techref/opkg
+	https://wiki.openwrt.org/zh-cn/doc/techref/opkg
+
+
+
+	执行opkg可以查看该命令的详细使用
+	opkg有个默认的配置文件(Use <conf_file> as the opkg configuration file. Default is /etc/opkg.conf),位于/etc/opkg.conf
+	我们可以通过-f参数来执行opkg命令的默认配置文件
+
+	例如:
+		当我们执行opkg update命令的时候,会查找默认的配置文件/etc/opkg.conf
+		然后根据配置文件中的lists_dir ext /var/opkg-lists，来把软件仓库的软件包信息保存在/var/opkg-lists目录下
+		
+
+
+	
+
+	常用命令:
+		opkg update : 更新可用的软件包列表
+
+		
+
+配置文件:
+	/etc/opkg.conf
+相关目录:
+	/etc/opkg/
+
+
+	
+
+	

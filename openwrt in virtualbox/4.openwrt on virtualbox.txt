@@ -1,0 +1,251 @@
+openwrt in virtualbox:
+(虚拟机中运行openwrt)
+
+
+
+
+
+官方文档:
+	https://wiki.openwrt.org/doc/howto/virtualbox
+
+
+在虚拟机中运行openwrt:
+
+
+	安装:
+	使用官方编译好的virtualbox openwrt镜像:
+		1.下载镜像,https://downloads.openwrt.org/,查找任意版本，使用x86架构
+		例如:
+		(32位)
+			https://downloads.openwrt.org/chaos_calmer/15.05.1/x86/generic/openwrt-15.05.1-x86-generic-combined-ext4.img.gz
+			https://downloads.lede-project.org/releases/17.01.1/targets/x86/generic/lede-17.01.1-x86-generic-combined-ext4.img.gz
+			(64位)
+			https://downloads.openwrt.org/chaos_calmer/15.05.1/x86/64/openwrt-15.05.1-x86-64-combined-ext4.img.gz
+			https://downloads.lede-project.org/releases/17.01.1/targets/x86/64/lede-17.01.1-x86-64-combined-ext4.img.gz
+			
+		2.img文件需要转换为virtalbox的vdi格式,
+		转换命令:vboxmanage  convertfromraw --format vdi 镜像文件.img 转换后的文件.vdi
+		例如:vboxmanage  convertfromraw --format vdi ./openwrt-15.05.1-x86-generic-combined-ext4.img openwrt.vdi
+			
+		3.再virtual中创建虚拟机
+		
+
+VBoxManage convertfromraw --format VDI openwrt-15.05.1-x86-64-combined-squashfs.img openwrt-15.05.1-x86-64-combined-squashfs.vdi
+
+
+
+
+
+
+	自己编译virtualbox镜像文件:
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+---------------------------------------
+网络配置：
+---------------------------------------
+
+	ping www.baidu.com查看是否可以上网,此时openwrt可能不能上网，进行网路配置:
+网络配置:
+	NAT模式:
+		虚拟机访问网络的所有数据都是由主机提供的，虚拟机并不真实存在于网络中，主机与(主机所在的真实网络中的)任何机器都不能查看和访问到虚拟机的存在。
+		虚拟机可以通过网络只能单向访问访问到主机，主机无法通过网络访问到虚拟机。
+		虚拟机可以通过网络只能单向访问(主机所在的真实网络中的)其他主机，(主机所在的真实网络中的)其他主机不能通过网络访问到虚拟机。
+		NAT模式下的多个虚拟机与虚拟机各自完全独立，相互间无法通过网络访问彼此。
+	网桥:
+		通过主机网卡，架设了一条桥，直接连入到网络中了。即:虚拟机能被分配到一个网络中独立的IP，所有网络功能完全和在网络中的真实机器一样。
+		虚拟机和主机可以相互访问
+		虚拟机和主机所在网络中的其他主机可以相互访问
+		虚拟机和虚拟机可以相互访问
+	
+	虚拟机网卡说明:
+		虚拟机可以添加多块网卡，如果虚拟机装的是linux系统，则多块网卡分别是eth0,eth1,.....
+		进入虚拟机系统的时候可以根据网卡mac地址来对应，虚拟机中添加的网卡,查看虚拟机中的网卡可以在网络设置中查看
+		
+		
+openwrt在虚拟机中的配置:
+	openwrt网络配置实际是配置wan口,如果把openwrt看做一台电脑的话,那么wan口就相当于电脑连接外部网络的网卡
+	openwrt的其他几个lan口都是通过wan口做端口转发虚拟出来的
+	
+	1.NAT模式:
+		该模式，真实主机无法访问虚拟机,如果要访问，需要设置端口转发
+		vi /etc/config/network
+		
+		例子如下:
+		---------------------------
+		config interface 'loophack'
+			option ifname lo
+			option proto 'static'
+			option ipaddr '127.0.0.1'
+			option netmask '255.0.0.0'
+		config interface 'wan'
+			option ifname 'eth0'
+			option proto 'dhcp'
+		---------------------------
+
+		注意如果不设置	config interface 'loophack'
+			option ifname lo
+			option proto 'static'
+			option ipaddr '127.0.0.1'
+			option netmask '255.0.0.0'
+		则路由器虽然能启动，有ip，但是路由器本身是不能通过主机的物理网卡nat转换过来的ip地址上网,这个lo是干嘛用的?
+		
+    	此时，openwrt虚拟机的wan口自动被虚拟机制定一个私有地址,openwrt虚拟机访问外部网络通过真实主机的网络转换来上网
+    	设置完以上参数后，要重启:/etc/init.d/network restart
+    	注意:ifname中的eht0对应的是虚拟机中添加的网卡名称,如果是多块网卡也可以设置eth1,eth2...
+
+
+
+		如果openwrt设置的是nat模式来设置wan口，则此时，主机是无法直接访问虚拟机(openwrt)的，此时需要做端口转发
+		注意:
+			1.转发的时候，端口选择选对要教大，因为对于mac和linux系统来说，1024端口一下的系统禁止访问
+			2.选择对应网卡->高级->端口转发->例如:
+			----------------------------------------------------------------------------------------------------
+			名称	协议	主机ip				主机端口		子系统ip		子系统端口
+			ssh		tcp		127.0.0.1			2222			10.0.2.15		22
+			telnet	tcp 	192.168.29.21		2233			10.0.2.15		23
+			web		tcp		127.0.0.1			8080			10.0.2.15		80
+			----------------------------------------------------------------------------------------------------
+			ssh默认端口为22
+			telnet默认端口为23
+			http web默认端口为80
+			
+			名称可以自定义,记录你这个端口转发用来做什么的
+			主机ip:		指的是你的物理主机的ip地址,这里可以是127.0.0.1或者是一个实际的ip地址(可以通过命令查看)
+			主机端口:	对于linux或者unix系统，要注意主机端口最好大于1024，默认这些系统是不允许对外开放的
+			子系统ip:	这里是指虚拟机(openwrt)的ip地址
+			子系统端口:	虚拟机(openwrt)要被访问的端口
+
+		通过主机访问路由器:
+			1.通过telnet命令访问路由器,此时通过把本机ip192.168.29.21的端口2233，转发到虚拟机openwrt,10.0.2.15的22端口
+			telnet 192.168.29.21 2233	
+			
+			2.通过ssh命令访问虚拟机openwrt,这里因为配置主机ip的时候，写的是127.0.0.1,所以可以通过以下命令访问
+			ssh -p 2222 root@127.0.0.1
+			或者
+			ssh -p 2222 root@localhost
+			
+			3.访问web界面,因为主机ip设置的为127.0.0.1，所以localhost和127.0.0.1 等价
+			http://localhost:8080
+			或者
+			http://127.0.0.1:8080
+			
+			
+				
+			
+			
+
+			
+			
+	
+
+
+
+
+
+
+
+
+	
+	2.网桥模式:
+		这种模式下,虚拟机类似一个真实的物理机器接入真实的网络中,真实主机可以访问虚拟机，虚拟机也可以访问真实主机,在调试openwrt时候比较方便.
+		注意:如果真实电脑有多块网卡，虚拟机配置桥接的时候，要选择真实电脑中能上网的那块网卡
+		在网络->网卡(adapther)中的->界面名称(name)属性中选择需要进行桥接的真实电脑中能上网的网卡(查看物理主机中的网络连接情况可知道哪块网卡能上网)
+		设置动态地址::::::::::::::::::::::::::::::
+		例如:真实电脑中有2块网卡，分别是eth0和eth1，在真实电脑中可以通过ifconfig查看哪块网卡能上网
+		桥接就是利用主机能上网的网卡来模拟一座桥，虚拟机可以通过这座桥来访问真实网络，此时虚拟机相当于一台真实的物理机器连接在了主机被选择的桥接的网卡所在的网段
+		vi /etc/config/network
+
+		config interface 'loophack'
+			option ifname lo
+			option proto 'static'
+			option ipaddr '127.0.0.1'
+			option netmask '255.0.0.0'
+		config interface 'wan'
+			option ifname 'eth0'
+			option proto 'dhcp'
+			
+    	重启:/etc/init.d/network restart
+    	此时，openwrt虚拟机的wan口是物理主机真实网络中动态获取的ip地址
+    	设置静态地址::::::::::::::::::::::::::::::
+    	例如:当前物理主机所在的真实网络是
+    	192.168.2.1
+    	255.255.255.0
+    	配置静态地址(要和真实物理网络的网关对应):
+    	vi /etc/config/network
+		config interface 'wan'
+			option ifname 'eth0'
+			option proto 'static'
+			option ipaddr '192.168.2.222'
+			option netmask '255.255.255.0'
+			option gateway '192.168.2.1'
+			option dns '192.168.2.1'
+		重启:/etc/init.d/network restart
+		或者是:
+		vi /etc/config/network
+		config interface 'wan'
+			option ifname 'eth0'
+			option proto 'static'
+			option ipaddr '192.168.2.222'
+			option netmask '255.255.255.0'
+			option gateway '192.168.2.1'
+			option dns '8.8.4.4 8.8.8.8'
+		重启:/etc/init.d/network restart
+		注意:ifname中的eht0对应的是虚拟机中添加的网卡名称,如果是多块网卡也可以设置eth1,eth2...
+	此时通过ping可以测试网络ip是否设置成功
+
+	网络配置完以后，可以通过telnet命令登录路由器
+	第一次登录的时候，没有密码，通过:telnet 路由器ip地址来登录
+	(如果不能登录，路由器防火墙关闭一下,/etc/init.d/firewall stop)
+	登录后，可以设置root密码，设置密码后，系统会禁用telnet登录,开启ssh,例如:
+	telnet 192.168.6.106
+	Trying 192.168.6.106...
+	Connected to 192.168.6.106.
+	Escape character is '^]'.
+	 === IMPORTANT ============================
+	  Use 'passwd' to set your login password
+	  this will disable telnet and enable SSH
+	 ------------------------------------------
+
+
+	配置完网络后，访问http://192.168.2.222无法访问路由界面
+	检查:
+		1.luci是否安装
+		2.uhttpd服务是否启动
+		3.防火墙是否关闭
+	
+
+	
+	
+	
+	
+	
+	
+	
+	测试命令的时候，最好通过电脑的terminal远程连接路由器，如果你在虚拟机中安装openwrt，默认虚拟机显示窗口很小，而且没有屏幕缓冲，内容一多，就无法查看
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

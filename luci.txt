@@ -1,0 +1,8 @@
+luci:
+	github地址:https://github.com/openwrt/luci	
+	嵌入式设备中缺少一个免费，干净，扩展性好，易于维护的web用户接口.
+	大多数的相似配置接口大量使用shell-scripting语言，但是luci使用:
+	lua编程语言
+	而且把接口按逻辑分割，例如:models , views,使用面向对象的库和模板
+	这能保证更好的性能，更小的安装尺寸,更简单的维护
+

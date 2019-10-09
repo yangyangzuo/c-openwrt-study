@@ -1,0 +1,87 @@
+UCI (Unified Configuration Interface):
+	官方文档:https://wiki.openwrt.org/doc/techref/uci
+	
+	源码:http://git.openwrt.org/?p=project/uci.git;a=summary
+	git clone https://git.openwrt.org/project/uci.git
+
+	uci是用c语言写的一个应用程序(同时还有一个对shell脚本的包装程序), 其开发目的是集中管理一个OpenWrt设备内的所有配置选项. 
+	UCI是对 OpenWrt历史版本White Russian上 NVRAM基础配置管理系统 的一个继承, 是一个对众多应用程序自带的标准配置文件的包装, 
+	比如像: /etc/network/interfaces, /etc/exports, /etc/dnsmasq.conf, /etc/samba/samba.conf 等. 
+
+	
+
+
+
+
+	uci的配置文件位于:/etc/config/
+	文档:https://wiki.openwrt.org/doc/uci
+	这些配置文件可以通过任何文本编辑器/命令行应用程序uci/各种编程api(shell/lua/c)来进行修改.
+	例如:WUI(web user interface) luci就是通过lua来管理这些配置文件的
+
+	libuci: 是用c语言为uci写的一个库文件
+	libuci-lua: 是一个libuci-plugin,libuci对于lua支持的插件，可以被lua语言调用，luci就是使用他来管理配置文件
+	这2个库都在uci的git里面维护
+	
+	程序包:
+	uci:unified configuration interface应用程序包
+	libuci: unified configuration interface的c语言库文件
+	libuci-lua: uci的lua插件包
+	
+	
+	
+	
+	
+	uci独立编译使用:
+		https://wiki.openwrt.org/doc/techref/uci-->Usage outside of OpenWrt
+		1.git clone https://git.openwrt.org/project/uci.git
+		2.cd uci
+
+cmake .
+make 
+当前目录会有uci命令,测试执行uci命令	
+	
+	
+	
+	
+	
+编译libubox:
+进入libubox目录:
+cmake CMakeLists.txt -DBUILD_LUA=OFF
+make 
+sudo make install
+
+
+提示:
+json
+    linked by target "blobmsg-example" in directory /home/zuoyang/Desktop/libubox/examples
+    linked by target "json_script-example" in directory /home/zuoyang/Desktop/libubox/examples
+解决办法:
+	下载json-c,按照readme.md提示，进行编译安装,安装完成后(安装如果出错，可使用sudo)，libbox不会提示json库不存在
+
+如果没有参数:-DBUILD_LUA=OFF,则会提示:
+/home/zuoyang/Desktop/libubox/lua/uloop.c:21:17: fatal error: lua.h: 没有那个文件或目录
+
+
+
+编译错误:
+	declared with attribute warn_unused_result [-Werror=unused-result]
+解决办法:
+	由于编译器把警告当做错误来处理了，这里注释掉 makefile/cmakelists中的ADD_DEFINITIONS(-Os -Wall -Werror --std=gnu99 -g3 -Wmissing-declarations)
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+

@@ -1,0 +1,211 @@
+官方网站:
+    https://www.openwrt.org/
+    
+
+
+获取源码:
+    主页->Development链接
+    或者
+    https://dev.openwrt.org/
+    
+    
+cpu芯片支持:
+	https://wiki.openwrt.org/doc/hardware/soc
+
+
+
+相关编程语言:
+    c
+	c++
+    lua
+    shell
+    python    
+	perl
+
+
+http://my.oschina.net/zuobz/blog/208034
+http://transing.xyz/
+https://github.com/qdk0901/openwrt-rt5350
+
+
+
+    
+源码编译:
+	官方文档:
+    1.源码目录下的README文件有详细说明
+	2.(中文)http://wiki.openwrt.org/zh-cn/doc/howto/build
+	3.(英文)http://wiki.openwrt.org/doc/howto/buildroot.exigence
+
+	操作:
+	1.下载源码,通过svn或者git,https://dev.openwrt.org/wiki/GetSource 
+	2.安装README文件中提示的依赖包,(如果提示包缺少，可以查找该页面，找到对应平台的包的名字:http://wiki.openwrt.org/doc/howto/buildroot.exigence) 
+	3.进入下载的源码目录openwrt,执行 ./scripts/feeds update -a
+	4.进入下载的源码目录openwrt,执行 ./scripts/feeds install -a
+	5.进入下载的源码目录openwrt,执行 make menuconfig,选择对应的芯片，并保存配置
+	6.编译,make 或者 make V=99	(V=99,打印编译的debug信息)    
+    
+    
+    
+    
+openwrt目录分析:
+	bin(编译后生成目录bin,里面包含了编译后的固件,*.bin,*.ipk)
+	build_dir(编译后生成目录)
+	config
+	dl(编译后生成目录,存放的下载的源码包)
+	docs
+	feeds(编译后生成目录)
+	include
+	package
+	scripts
+	staging_dir(编译后生成目录)
+	target
+	temp(编译后生成目录)
+	toolchain(放置编译交叉工具的配置文件与源代码)
+	tools
+    
+    
+  
+openwrt安装到路由器:
+	http://wiki.openwrt.org/doc/howto/generic.flashing
+	http://wiki.openwrt.org/zh-cn/doc/howto/generic.flashing
+	1.通过web管理页面
+	2.通过bootloader和enternet port
+	3.通过bootloader和serial port
+	4.通过JTAG
+
+
+
+  
+    
+视频教程:
+	http://v.diveinedu.com/course/explore/i8beag83
+	
+
+
+
+
+
+
+名词解释:
+
+
+	---------------------------------------------------------------------------------
+	luci: lua + uci(unified configuration interface)
+	---------------------------------------------------------------------------------
+	openwrt在构建的时候，把luci源码下载到了openwrt/feeds/luci目录
+
+
+
+
+	---------------------------------------------------------------------------------
+	openwrt buildroot
+	---------------------------------------------------------------------------------
+
+	1.penwrt buildroot介绍:
+	翻译地址:http://wiki.openwrt.org/about/toolchain
+	openwrt buildroot是一系列的makefile和patches(补丁),可以让用户很容易的在embeded systems(嵌入式系统)中生成cross-compilation toolchain(交叉编译工具链)和root filesystem(根文件系统).
+	opewrt buildroot是一个深度修改的buildroot,交叉编译工具链(cross-compilation toolchain)使用的时uclibc,a tinty c standard library
+	compilation toolchain是用来在电脑上编译代码的一些列的工具，包含:
+	a compiler(编译器,gcc)
+	binary utils(assembler and linker)汇编器和链接器
+	c standard library(c标准库),例如:gnu libc,uclibc,dietlibc
+	如果当你使用PC，你的编译工具链工作在x86架构的处理器上，产生的程序也是在x86处理器上使用的
+	在大多数Linux系统中，交叉工具链采用GNU libc(glibc)作为c的标准类库。这种编译工具链通常被称为“主机编译工具链【"hostcompilation toolchain】”。
+	你用来做开发工作的电脑上跑的系统被称作“主机系统【hostsystem】”
+	这个编译工具链由你的Linux发行版【distribution】的操作系统自带，而Buildroot则于你的操作系统无关（但使用Buildroot建立的交叉工具链和其他工具可以在你的主机系统执行）
+
+	正如前面所述，编译工具链由你的系统所提供，运行在你的系统上，产生你系统所用处理器可以执行的代码文件。
+	由于你的嵌入式系统的处理器通常与你的开发主机不同，你需要一个交叉编译【cross-compilation】工具链，这工具链运行在你的开发主机上，但产生你的嵌入式目标主机（目标处理器）的可执行代码。
+	比如你的开发主机系统采用x86处理器，而你的嵌入式目标系统处理器是ARM的，普通的编译工具链在你的开发主机上只能产生x86处理器的执行代码，而交叉编译工具链则可以在你的开发主机上产生ARM处理器的可执行代码。
+	当你手动配置和编译你自己的软件的时候，openwrt buildroot可以自动的完成处理过程在特殊指令架构的大多数嵌入式系统
+	buildroot时为开发和一些没有经验的用户设计的，可以让他们很容易构建自己的定制的固件
+	openwrt makefile有自己的语法，和标准的make工具的makefile文件不同,openwrt makefile定义了meta information of package,哪里区下载，哪里区编译，哪里去安装编译的package,等等
+
+	2.openwrt buildroot安装:
+	翻译地址:
+		http://wiki.openwrt.org/doc/howto/buildroot.exigence
+		http://wiki.openwrt.org/zh-cn/doc/howto/buildroot.exigence
+	openwrt buildroot是openwrt linux distribution的构建系统(buildsystem),openwrt buildroot工作在linux,bsd和macosx系统上
+		1.安装git,方便下载openwrt source code和build tools用来做交叉编译
+			sudo apt-get update
+			sudo apt-get install git-core build-essential libssl-dev libncurses5-dev unzip
+			一些feeds可能通过git无法下载，但是通过subversion和mercurial可以下载，可以安装svn和mercurial
+			sudo apt-get isntall subversion mercurial
+		2.下载openwrt源码
+			git clone git://git.openwrt.org/openwrt.git
+			这条命令会创建一个openwrt目录,这个目录是openwrt buildroot的构建目录(build-diectory)
+			openwrt toolchain(openwrt buildroot)包含在其中
+		3.下载和安装可用的feeds
+			cd openwrt
+			./scripts/feeds update -a
+			./scripts/feeds install -a
+		4.在你的构建系统(build-system)上，使用如下其中一条命令来检查openwrt buildroot是否丢失packages
+			make defconfig
+			make prereq
+			make menuconfig
+
+	3.openwrt buildroot usage:
+		
+	---------------------------------------------------------------------------------
+	feeds
+	---------------------------------------------------------------------------------
+	翻译文档:http://wiki.openwrt.org/doc/devel/feeds
+	openwrt中,a feed is a collection of packages which share a common location.
+	feeds可能在一个远程服务器里，一个版本控制器里，一个本地文件系统里，或者任何一个feed支持的地址格式里(path/url)
+	feed配置:
+		可用的feeds列表在feeds.conf文件里(如果feeds.conf不存在，则使用feeds.conf.default)(源码根目录下有一个feeds.conf.default文件)
+		这个文件包含了feeds的列表,每行一个,也包含了任意数量的空行
+		如果一行以#开头，表示这行是注释
+		每一个feed行是有3个空格分割开的，分别是:feed method,feed name,feed source,例如:
+		src-git management https://github.com/openwrt-management/packages.git
+		#src-git oldpackages http://git.openwrt.org/packages.git
+		支持很多种method，详细查看文档	
+		用户可以定制修改scripts/feeds文件(该文件时用perl些的脚本)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mtk和ralink：
+
+
+
+lua和uci:
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+

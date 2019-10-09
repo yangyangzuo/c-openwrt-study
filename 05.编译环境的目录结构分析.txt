@@ -8,20 +8,27 @@ buildroot相关的项目busybox(瑞士军刀)
 
 
 
-
+编译过程:
+    1.toolchain
+    2.下载代码,build程序(kernel+程序)
+    3.创建rootfs(库+程序)
+    4.创建image(kernel+rootfs)
 
 
 编译后的目录结构:
-    bin/packages:
-    bin/targets/ramips:固件编译完成后的目录
-    bin/targets/ramips/packages:ipk包文件
+    
+    bin(make时生成):
+        bin/packages:
+        bin/targets/ramips:固件编译完成后的目录
+        bin/targets/ramips/packages:ipk包文件
+    build_dir(make时生成):
     config
-    dl:编译时的下载目录
+    dl(make时生成)::
     feeds:feeds install命令执行时下载的第三方包
     include:
     package:
     scripts:
-    staging_dir:
+    staging_dir(make时生成):交叉工具链
     target:
     tmp:
     toolchain:

@@ -209,6 +209,24 @@ General requirements for OpenWrt support
 
 
 
+编译后的文件:
+
+    openwrt-芯片架构(arm/rampis)-芯片名称-机器品牌设备型号-系统文件格式(initramfs/squashfs)-升级（sysupgrade)/出厂(factory)(第一次安装/升级使用).bin
+    The *-factory.bin images are for the first installation.
+    The *-sysupgrade.bin images are for the updating existing OpenWrt installations.
+
+
+    例如:
+    openwrt-ramips-mt7620-phicomm_psg1208-initramfs-kernel.bin
+    openwrt-ramips-mt7620-phicomm_psg1208-squashfs-sysupgrade.bin
+
+
+
+
+
+
+
+
 
 
 编译中的误区:

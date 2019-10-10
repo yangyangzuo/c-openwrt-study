@@ -132,7 +132,7 @@ General requirements for OpenWrt support
 注意事项:
     1.不能使用root用户编译
     2.梯子全局代理
-
+    3.编译的时候，最好不要选择太多的应用程序包，否则可能编译包过大，造成刷机失败变砖，软件可以等系统刷入后，在逐个安装
 
 1.安装ubuntu系统
 2.下载openwrt源码
@@ -231,6 +231,7 @@ General requirements for OpenWrt support
 
     https://openwrt.org/docs/guide-developer/quickstart-build-images
     //非openwrt系统第一次刷openwrt系统
+    //现在新版本openwrt代码编译后没有*-factory.bin,变成了*-kernel.bin
     The *-factory.bin images are for the first installation.
     //已有的openwrt系统上刷openwrt系统
     The *-sysupgrade.bin images are for the updating existing OpenWrt installations.

@@ -80,19 +80,39 @@ cpu芯片厂商使用的bootloader:
 
 救砖:
 
-1.编程器写入固件
-    https://www.youtube.com/watch?v=1utZ6CqaLpk
-    https://www.youtube.com/watch?v=L1Qh4Bk_vNg
-    https://www.youtube.com/watch?v=ams9-TV0r6I
-    除锡的时候可以使用清锡带
-    把路由器上的闪存拆下来
-    然后焊接到编程器的板子上
-    接着通过编程器把固件写到闪存上
-    最后再把闪存焊接到路由器上
+
+对flash进行重新读写(把系统刷入flash)
+
+
+1.接通电源可以点亮，但是无法启动系统
+    https://www.youtube.com/watch?v=DvouDDs3YTg
+    可以不拆flash(如果拆也可以，见方法2)
+    ttl线+ftp刷flash
+
+
+2.完全变砖,接通电源没反应
+
+    使用编程器写入固件
+    1.1 拆flash
+        https://www.youtube.com/watch?v=1utZ6CqaLpk
+        https://www.youtube.com/watch?v=L1Qh4Bk_vNg
+        https://www.youtube.com/watch?v=ams9-TV0r6I
+        除锡的时候可以使用清锡带
+        把路由器上的闪存拆下来
+        然后焊接到编程器的板子上
+        接着通过编程器把固件写到闪存上
+        最后再把闪存焊接到路由器上
+    或者
+        不拆flash,买个夹子连接flash和编程器
+        然后通过编程器把固件写到闪存上
 
 
 
-2.拆路由器,
+
+
+
+
+其他的方式:
 https://www.youtube.com/watch?v=54N2PCulJ5E
 路由器主板短路
 usb_burning_tool工具烧录

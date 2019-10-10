@@ -86,10 +86,11 @@ cpu芯片厂商使用的bootloader:
 
 1.接通电源可以点亮，但是无法启动系统
     https://www.youtube.com/watch?v=DvouDDs3YTg
+    https://www.youtube.com/results?search_query=openwrt+ttl
     可以不拆flash(如果拆也可以，见方法2)
     ttl线+ftp刷flash
-
-
+    usb转ttl/usb转串口/ttl线
+    
 2.完全变砖,接通电源没反应
 
     使用编程器写入固件

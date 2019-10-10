@@ -84,14 +84,14 @@ cpu芯片厂商使用的bootloader:
 对flash进行重新读写(把系统刷入flash)
 
 
-1.接通电源可以点亮，但是无法启动系统
+1.接通电源可以点亮，但是无法正常启动系统
     https://www.youtube.com/watch?v=DvouDDs3YTg
     https://www.youtube.com/results?search_query=openwrt+ttl
     可以不拆flash(如果拆也可以，见方法2)
     ttl线+ftp刷flash
     usb转ttl/usb转串口/ttl线
-    
-2.完全变砖,接通电源没反应
+
+2.完全变砖,接通电源没反应,系统不启动
 
     使用编程器写入固件
     1.1 拆flash

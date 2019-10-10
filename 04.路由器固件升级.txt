@@ -21,23 +21,16 @@ cpu芯片厂商使用的bootloader:
 
 
 
-
-
-变砖:
-    固件损坏,不能启动
-修砖:
-    此时需要使用bootloader(uboot/cfe)去升级
-
-
-
-
-
-
-1.通过固件升级
+1.通过web上传方式固件升级
     web方式上传固件
+    电脑链接路由器，要使用网线，因为固件需要上传，保证网络质量使用有线连接
+    登录原始路由系统，选择固件，升级即可
 
+    openwrt和原厂固件互刷
+    https://www.youtube.com/watch?v=A2xbZgCe7JY
 
-
+    openwrt刷回原厂固件
+    https://www.youtube.com/watch?v=vxVzJz2KcRc
 
 
 
@@ -62,8 +55,44 @@ cpu芯片厂商使用的bootloader:
 
 
 
+3.编程器写入固件    
+
+
+
+
+
+
+
+
+
+
+
+
+
+变砖:
+    固件损坏,不能启动
+修砖:
+    此时需要使用bootloader(uboot/cfe)去升级
+
+
 
  
 
-3.编程器写入固件
+救砖:
 
+1.编程器写入固件
+    https://www.youtube.com/watch?v=1utZ6CqaLpk
+    https://www.youtube.com/watch?v=L1Qh4Bk_vNg
+    https://www.youtube.com/watch?v=ams9-TV0r6I
+    除锡的时候可以使用清锡带
+    把路由器上的闪存拆下来
+    然后焊接到编程器的板子上
+    接着通过编程器把固件写到闪存上
+    最后再把闪存焊接到路由器上
+
+
+
+2.拆路由器,
+https://www.youtube.com/watch?v=54N2PCulJ5E
+路由器主板短路
+usb_burning_tool工具烧录

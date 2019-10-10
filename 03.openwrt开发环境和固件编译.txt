@@ -129,6 +129,11 @@ General requirements for OpenWrt support
 
 
 
+注意事项:
+    1.不能使用root用户编译
+    2.梯子全局代理
+
+
 1.安装ubuntu系统
 2.下载openwrt源码
     创建目录study
@@ -183,11 +188,12 @@ General requirements for OpenWrt support
                         m设置<M>,包被编译，但是不会包含到固件中
                         n设置< >,源码不会被处理(不会被编译)
 
-                        首先选择target system(选择厂商品牌)，enter进入
+                        首先选择target system(编译目标/主目标/厂商品牌)，enter进入
                             这里我们的芯片是 mediatec MT7620A,
                             所以选择mediatek ralink mips
-                        然后选择 subtarget(选择芯片),enter进入
+                        然后选择 subtarget(子目标/选择芯片),enter进入
                             选择mt7620
+
                         然后在target profile的支持平台列表中查找对应的设备型号
                             选择phicomm psg1208(如果选择了default profile,则所有支持设备都会编译)
 
@@ -201,9 +207,18 @@ General requirements for OpenWrt support
 
 
 3.编译系统
+
+    编译系统之前最好执行一下make clean，
+    可以清除你上次编译后的文件和相关目录
+    https://openwrt.org/docs/guide-developer/build-system/use-buildsystem
+    make clean
+
+
+    正式编译命令
+    V表示verbose,啰嗦模式/冗长模式，会把日志过程打印出来
     make V=99
 
-    V表示verbose,啰嗦模式/冗长模式，会把日志过程打印出来
+    
 
 
 

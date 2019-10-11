@@ -205,14 +205,14 @@ General requirements for OpenWrt support
                             当然如果你的设备已经是openwrt了,而且你的设备型号时phicomm psg1208，这里就可以选择phicomm psg1208,只会编译如上的2个文件，节省时间
                             
                             选型值的含义:
-                                multiple devices:编译多镜像(没有编译除*.bin文件)
-                                default profile:编译支持大多数板子,很多的支持型号都会编译出来
-                                某个具体的型号:只编译这个具体型号的2个文件，例如:
+                                multiple devices:编译多设备(选择这个后，需要在主界面弹出的target devices中选择你的设备，如果不在target devices中选择，则一个bin也不编译)
+                                default profile:编译支持大多数板子(编译市面上常见的一部分设备,不一定编译你的设备型号),很多的支持型号都会编译出来
+                                某个具体的型号:只编译这个具体型号(只生成2个文件)，例如:
                                 openwrt-ramips-mt7620-phicomm_psg1208-initramfs-kernel.bin
                                 openwrt-ramips-mt7620-phicomm_psg1208-squashfs-sysupgrade.bin
-
-
-
+                         
+                        如果是第一次从别的系统安装为openwrt系统，则需要在target devices中选择你的设备型号
+                            ？？？？？？？？？？并且勾选default profile
 
 
                         可选:
@@ -246,7 +246,7 @@ General requirements for OpenWrt support
     
 
 编译时间:
-    第一次编译:
+    第一次编译:70分钟
     第二次编译:13分钟
 
 
@@ -263,6 +263,15 @@ General requirements for OpenWrt support
     //已有的openwrt系统上刷openwrt系统
     The *-sysupgrade.bin images are for the updating existing OpenWrt installations.
 
+    openwrt的固件一般分两种类型：
+        factory原厂固件:
+            多了一些验证的东西，不带Luci界面，wifi默认不打开，用于在原厂固件的基础上进行升级。
+            普通家用路由一般不是openwrt固件，如果要将家用路由升级为openwrt固件，就可以用factory刷到路由上。
+        sysupgrade固件:
+            sysupgrade是在openwrt路由基础上升级固件，无论你是原厂固件或者本身就是openwrt固件，要升级到openwrt，factory都适用，
+            但是sysupgrade只能用在升级，TTL救砖的时候就不能用sysupgrade。sysupgrade不包含数据分区，factory带，factory预留原厂分区，sysupgrade只包含openwrt分区。
+        
+
 
     例如:
     只包含内核的固件
@@ -272,8 +281,7 @@ General requirements for OpenWrt support
 
 
 
-
-
+如果编译后发现不存在×-factory.bin或者*-sysupgrade.bin文件，很可能时编译文件过大
 
 
 
@@ -286,6 +294,11 @@ General requirements for OpenWrt support
     (在一个4核心的cpu上进行编译)
 
 
+
+
+
+Target Profile选中中找不到你的路由器型号怎么办?
+    https://blog.csdn.net/baidu_31437863/article/details/89432413
 
 
 

@@ -20,7 +20,7 @@ cpu芯片厂商使用的bootloader:
 
 注意:
     第一次安装openwrt系统的时候，刷的时*-factory.bin文件
-    
+    https://openwrt.org/start?id=zh/docs/guide-quick-start/factory_installation
 
 
 
@@ -59,7 +59,14 @@ cpu芯片厂商使用的bootloader:
 
 
 3.编程器写入固件    
-
+    烙铁
+    锡
+    清锡纸
+    风枪
+    编程器
+    镊子
+    编程器
+    usb转ttl
 
 
 
@@ -87,6 +94,12 @@ cpu芯片厂商使用的bootloader:
 对flash进行重新读写(把系统刷入flash)
 
 
+
+编程器需要支持spi烧录(路由器flash)
+https://www.youtube.com/watch?v=wiuVR7gjAi8
+
+
+
 1.接通电源可以点亮，但是无法正常启动系统
     https://www.youtube.com/watch?v=DvouDDs3YTg
     https://www.youtube.com/results?search_query=openwrt+ttl
@@ -101,13 +114,16 @@ cpu芯片厂商使用的bootloader:
         https://www.youtube.com/watch?v=1utZ6CqaLpk
         https://www.youtube.com/watch?v=L1Qh4Bk_vNg
         https://www.youtube.com/watch?v=ams9-TV0r6I
+
+        https://www.youtube.com/watch?v=lEMeAjvabpQ
         除锡的时候可以使用清锡带
         把路由器上的闪存拆下来
         然后焊接到编程器的板子上
         接着通过编程器把固件写到闪存上
         最后再把闪存焊接到路由器上
     或者
-        不拆flash,买个夹子连接flash和编程器
+        https://www.youtube.com/watch?v=NaPYKoEqcqU
+        不拆flash,买个烧录夹(夹子)连接flash和编程器
         然后通过编程器把固件写到闪存上
 
 
@@ -120,3 +136,24 @@ cpu芯片厂商使用的bootloader:
 https://www.youtube.com/watch?v=54N2PCulJ5E
 路由器主板短路
 usb_burning_tool工具烧录
+
+
+
+
+
+
+psg1208的帖子:
+基本配置：双频4天线，mt7620a+7612en，64M内存，8M闪存。性能还不错，但是因为型号太小众，一直没有大神发布刷机教程，于是作为第一次玩路由器的小白，我觉得自己开始折腾。
+
+1、一开始天真的以为可以用原厂的web升级页面刷机，于是自行编译了openwrt尝试刷进去，然后果然失败了。
+
+2、然后在网上看到有介绍ttl刷机的教程，于是拆机、焊ttl针脚、买usb转串口线，本以为这样肯定没问题了。
+
+但是，即使进入了官方系统自带的命令行和uboot界面，还是无法刷入H大的breed或者任何固件，我还以为是自己操作不正确，尝试了各种方法都不行，最后可以肯定是官方的uboot有固件校验功能，第三方bootloader和固件都刷不进（理论上修改固件头应该可以，但是我没有找到方法）
+
+3、最后只能上大招，用编程器直接往闪存里写入bootloader！
+因为是第一次拆装闪存、第一次用编程器，紧张的不行，虽然每一步都花费不少时间，但是确保没有出问题。
+把flash写好焊回原处，上电，灯一下子就亮了，然后登陆192.168.1.1，breed恢复控制台出现在眼前，幸福来的太突然！
+
+4、之后就是各种刷固件，尝试了精简版的如意云、华硕RT-N14U、联想newifi openwrt、小米路由mini的openwrt，只有小米路由mini的openwrt可以开启5GHz的wifi，而且比较稳定，于是决定就用这个固件了。
+

@@ -192,10 +192,28 @@ General requirements for OpenWrt support
                             这里我们的芯片是 mediatec MT7620A,
                             所以选择mediatek ralink mips
                         然后选择 subtarget(子目标/选择芯片),enter进入
-                            选择mt7620
+                            这里选择mt7620
 
                         然后在target profile的支持平台列表中查找对应的设备型号
-                            选择phicomm psg1208(如果选择了default profile,则所有支持设备都会编译)
+                            这里选择default profile(第一编译需要选择这个)
+                            虽然当前的设备是phicomm psg1208,但是如果选择这个,则只会编译如下两个文件
+                                openwrt-ramips-mt7620-phicomm_psg1208-initramfs-kernel.bin
+                                openwrt-ramips-mt7620-phicomm_psg1208-squashfs-sysupgrade.bin
+                            而没有*-factory.bin文件，所以如果是从别的系统刷为openwrt的话,这里需要选择default profile
+                            因为我们需要*.-factory.bin文件，从其他的系统刷为openwrt系统
+
+                            当然如果你的设备已经是openwrt了,而且你的设备型号时phicomm psg1208，这里就可以选择phicomm psg1208,只会编译如上的2个文件，节省时间
+                            
+                            选型值的含义:
+                                multiple devices:编译多镜像(没有编译除*.bin文件)
+                                default profile:编译支持大多数板子,很多的支持型号都会编译出来
+                                某个具体的型号:只编译这个具体型号的2个文件，例如:
+                                openwrt-ramips-mt7620-phicomm_psg1208-initramfs-kernel.bin
+                                openwrt-ramips-mt7620-phicomm_psg1208-squashfs-sysupgrade.bin
+
+
+
+
 
                         可选:
                             选择luCI,回车进去 
@@ -203,6 +221,13 @@ General requirements for OpenWrt support
                             再空格选择第一个<*> luci（new）,
                             然后在Exit一路后退到主菜单
                         右方向键，选择exit退出，保存
+
+                        如果target system,subtarget,target profile都选择了特定型号，则只会编译这个特定的设备的板子固件
+                            openwrt-ramips-mt7620-phicomm_psg1208-initramfs-kernel.bin
+                            openwrt-ramips-mt7620-phicomm_psg1208-squashfs-sysupgrade.bin
+                        如果target system,subtarget选择了特定型号,target profile选择为default profile，则会编译支持所有的板子
+
+
 
 
 
@@ -220,7 +245,9 @@ General requirements for OpenWrt support
 
     
 
-
+编译时间:
+    第一次编译:
+    第二次编译:13分钟
 
 
 

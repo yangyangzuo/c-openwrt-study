@@ -19,4 +19,4 @@ https://wiki.openwrt.org/doc/howto/virtualization
 在虚拟机中安装操作系统,然后在操作系统中编译openwrt
 https://wiki.openwrt.org/doc/howto/buildvm
 
-
+https://www.youtube.com/watch?v=kjzQg_sB8rY

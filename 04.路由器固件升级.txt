@@ -18,6 +18,9 @@ cpu芯片厂商使用的bootloader:
 
 
 
+注意:
+    第一次安装openwrt系统的时候，刷的时*-factory.bin文件
+    
 
 
 

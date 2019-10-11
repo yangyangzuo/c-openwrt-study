@@ -2,7 +2,7 @@
     cpu:
         Atheros/QualCom高通(Atheros被QualCom高通收购)简写qca
         BroadCom博通,简写bcm
-        MediaTek联发科,简写mtk
+        MediaTek联发科,简写mtk(手机芯片大厂联发科(MediaTek)与WLAN芯片供应商雷凌科技(Ralink)于2016年合并,所以后面经常会看到 MediaTek和ralink一起出现)
         RealTek瑞昱
 
         cpu芯片一般内部集成交换机芯片(早起的交换机芯片一般时外挂的，现在大部分都时集成的)

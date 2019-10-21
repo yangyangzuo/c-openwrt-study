@@ -110,7 +110,23 @@ http://www.phicomm.com/cn/index.php/Products/family_spec/cateid/9/id/1.html
 
 
     FLASH：8MB
-  
+
+        winbond 
+        25Q64fvs1g
+        1524
+    google:
+        25q64fvsig datasheet
+        https://www.winbond.com/resource-files/w25q64fv%20revs%2007182017.pdf
+        https://www.winbond.com/resource-files/w25q64fv%20revq%2006142016.pdf
+        查看ordering information
+        w表示公司前缀winbond
+        25q:spiflash  serial flash memory with 4KB sectors
+        64f:64F=64M-bit=64/8 M byter=8MB
+        v:2.7v-3.6v
+        s(s):8pin
+        i:-40度-85度
+        g:green package
+
 
 
 

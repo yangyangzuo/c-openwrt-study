@@ -127,7 +127,10 @@ https://www.youtube.com/watch?v=wiuVR7gjAi8
         然后通过编程器把固件写到闪存上
 
 
-
+    编程器使用方法:
+        https://www.baidu.com/s?wd=ch341a%E7%BC%96%E7%A8%8B%E5%99%A8%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B&rsv_spt=1&rsv_iqid=0xec23cd1e003514ba&issp=1&f=3&rsv_bp=1&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_dl=ts_2&rsv_sug3=6&rsv_sug1=5&rsv_sug7=100&rsv_t=722fRrEn7cjltalgCV%2BRY0FgWwbIGNpszAbB6Fw2vEk8DRGarHzND91S62cW9vmDtHMr&rsv_sug2=0&prefixsug=ch%2526lt%253B41a&rsp=2&inputT=3792&rsv_sug4=3793&rsv_sug=2
+        https://tieba.baidu.com/p/5975418004?red_tag=2087883091
+        http://www.itmop.com/downinfo/312166.html
 
 
 
@@ -156,4 +159,174 @@ psg1208的帖子:
 把flash写好焊回原处，上电，灯一下子就亮了，然后登陆192.168.1.1，breed恢复控制台出现在眼前，幸福来的太突然！
 
 4、之后就是各种刷固件，尝试了精简版的如意云、华硕RT-N14U、联想newifi openwrt、小米路由mini的openwrt，只有小米路由mini的openwrt可以开启5GHz的wifi，而且比较稳定，于是决定就用这个固件了。
+
+
+
+
+
+
+
+
+
+
+
+
+usb to ttl:
+    usb转ttl线，最好买使用暴露板子的，如果使用封装好的(板子被塑料包裹),则调电压的话可能需要重新焊线
+
+    板子暴露的:
+        http://www.360doc.com/content/18/0308/08/30599128_735300872.shtml
+        http://www.win7999.com/wenda/630421259.html
+    板子被封装了:
+        https://jingyan.baidu.com/article/48206aea9b9280216ad6b3cb.html
+
+    安装:
+        将它插到电脑USB端口上，另一端不用接任何东西，开始安装驱动。
+        当你刚插上它时，电脑会自动安装驱动(需要连网)或者弹出安装驱动的选项，此时你可以点击安装驱动（如果没有，去网上下一个驱动）。
+        默认淘宝店设备会提供mac和window驱动:
+            https://item.taobao.com/item.htm?_u=gs24hn006a1&id=521699082592
+
+        查看是否安装成功:
+            linux: lsusb
+            window: (根据淘宝提供的测试工具)
+
+
+
+
+    连接设备串口调试:
+
+        GND(ground):
+            电路图上和电路板上的GND(Ground)代表地线或0线.GND就是公共端的意思，也可以说是地，但这个地并不是真正意义上的地
+            是出于应用而假设的一个地，对于电源来说，它就是一个电源的负极。它与大地是不同的。有时候需要将它与大地连接，有时候也不需要，视具体情况而定
+        
+
+        TXD:
+            发送数据 Transmit(tx) Data 简写形式
+        RXD:
+            接受数据 Receive(rx) Data 简写形式
+
+        TXD和RXD是单片机中用到的术语,
+        单片机与计算机进行串口通信时，单片机的RXD接计算机的TXD，单片机的TXD接计算机的RXD
+        单片机与串口设备（如GPRS模块、载波芯片等）通信时，一律将RXD与TXD反接，即单片机的RXD接设备的TXD，单片机的TXD接设备的RXD。（特殊标注其RXD与单片机RXD直连的除外，如华为的EM310）
+
+        Vcc:
+            是Volt Current Condenser的简写，意思是电路的供电电压
+            VCC（或Vcc）是之前TTL（Transistor-Transistor-Logic，晶体管-晶体管逻辑）技术时代的遗存。
+            TTL元件中，输入和输出的三极管驱动电路设计成共集电极方式。VCC（或Vcc）的意思就是共集电极上的电压（Voltage of the Common Collector）。
+    
+
+
+        linux:
+            ls /dev -l
+            查看是否有ttyUSB*,一般usb设备连接后会出现一个ttyUSB0/ttyUSB1,说明当前的usb设备(usb转串口ttl)已经连接上
+            例如:Bus 001 Device 005: ID 1a86:7523 QinHeng Electronics HL-340 USB-Serial adapter
+            dmesg | grep attached
+            [  307.569910] usb 1-12: ch341-uart converter now attached to ttyUSB0
+
+
+
+
+            如果不存在，使用mknod命令手动添加
+
+            
+            安装minicom
+                sudo agt-get install minicom
+                sudo minicom
+
+                https://www.cnblogs.com/zqb-all/p/9786836.html
+                https://www.baidu.com/s?wd=ubuntu%20minicom&rsv_spt=1&rsv_iqid=0xd5d74244000397b4&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_dl=tb&rsv_sug3=14&rsv_sug1=13&rsv_sug7=100&rsv_t=0da9O%2F4JgFHTi0PcirPigVVOgpThIMi38aAx1tTG1bgRw%2BYyl7fHvheD%2BnV8Kt7aVHCB&rsv_sug2=0&inputT=3336&rsv_sug4=3337
+                minicom:
+                    https://jingyan.baidu.com/article/6b182309f9dd6dba59e1597a.html
+                安装完该命令后,摁下ctrl+a,松开然后摁下z,即可出现帮助菜单
+                帮助菜单中的q是退出
+
+                设置对应的端口:
+                    对应的设备设置为/dev/ttyUSB*
+                    波特率设置为115200
+                    设置完后回车，保存为默认，然后退出
+                    退出后，一直摁回车键，即可链接到路由设备上，显示对应的路由信息
+
+
+                注意:
+                    mtk芯片一般的波特率是:
+                    57600/115200
+                    如果波特率设置的不对，minicom会接受不到数据或者接受的数据为乱码,我这里改为115200就可以正常接受数据了
+                    网上说乱码时因为数据线的问题，换一根数据线即可,这里没有测试
+
+                查看帮助
+                    minicom --h
+
+                如果设备设置的不正确，通过sudo minicom命令无法进入程序，可以执行 sudo minicom -s进入设置模式，重新设置对应的设备即可
+
+
+                进入路由器后，输入:
+                dmesg
+                可以显示相关数据信息,例如:
+                [    0.000000] Linux version 3.3.8 (luo@ZBT-Server) (gcc version 4.6.3 20120201 (prerelease) (Linaro GCC 4.6-2012.02) ) #1 Mon Jun 16 17:324
+                [    0.000000] MediaTek MT7620N CPU:580MHz, Bus:145MHz Uart:40MHz
+                [    0.000000] Boot form:SPI FLASH
+                [    0.000000] MIPS CPU sleep mode enabled.
+                [    0.000000]  Detecting memory...64 MB!
+                [    0.000000]  PCIE: bypass PCIe DLL.
+                [    0.000000]  PCIE: Elastic buffer control: Addr:0x68 -> 0xB4
+                [    0.000000]  disable all power about PCIe
+                [    0.000000]  PCIE: PLL power down for MT7620N
+                [    0.000000] CPU revision is: 00019650 (MIPS 24KEc)
+                [    0.000000] Determined physical RAM map:
+                [    0.000000]  memory: 04000000 @ 00000000 (usable)
+                [    0.000000] Zone PFN ranges:
+                [    0.000000]   Normal   0x00000000 -> 0x00004000
+                [    0.000000] Movable zone start PFN for each node
+                [    0.000000] Early memory PFN ranges
+                [    0.000000]     0: 0x00000000 -> 0x00004000
+                [    0.000000] On node 0 totalpages: 16384
+                [    0.000000] free_area_init_node: node 0, pgdat 802acaf0, node_mem_map 81000000
+                [    0.000000]   Normal zone: 128 pages used for memmap
+                [    0.000000]   Normal zone: 0 pages reserved
+                [    0.000000]   Normal zone: 16256 pages, LIFO batch:3
+                [    0.000000] pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
+                ....
+
+
+                输入:cat /proc/cpuinfo,会显示如下信息
+                system type             : MediaTek MT7620N
+                machine                 : ZBT WR8305RT
+                processor               : 0
+                cpu model               : MIPS 24KEc V5.0
+                BogoMIPS                : 385.02
+                wait instruction        : yes
+                microsecond timers      : yes
+                tlb_entries             : 32
+                extra interrupt vector  : yes
+                hardware watchpoint     : yes, count: 4, address/irw mask: [0x0000, 0x0a78, 0x0f78, 0x0f78]
+                ASEs implemented        : mips16 dsp
+                shadow register sets    : 1
+                kscratch registers      : 0
+                core                    : 0
+                VCED exceptions         : not available
+                VCEI exceptions         : not available
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

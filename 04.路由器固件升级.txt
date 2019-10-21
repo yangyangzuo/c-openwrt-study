@@ -122,6 +122,7 @@ https://www.youtube.com/watch?v=wiuVR7gjAi8
         接着通过编程器把固件写到闪存上
         最后再把闪存焊接到路由器上
     或者
+        https://www.bilibili.com/video/av68648921
         https://www.youtube.com/watch?v=NaPYKoEqcqU
         不拆flash,买个烧录夹(夹子)连接flash和编程器
         然后通过编程器把固件写到闪存上

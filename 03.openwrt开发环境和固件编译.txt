@@ -313,11 +313,6 @@ General requirements for OpenWrt support
 
 
 
-Target Profile选中中找不到你的路由器型号怎么办?
-    https://blog.csdn.net/baidu_31437863/article/details/89432413
-
-
-
 
 
 

@@ -1,0 +1,243 @@
+Target Profile选中中找不到你的路由器型号怎么办?
+    https://blog.csdn.net/baidu_31437863/article/details/89432413
+
+
+
+
+
+
+OpenWRT添加 Target Profile 选项
+引言
+在下载的原始的OpenWRT源码中，通过Target Profile ------>选择具体的路由器型号，但是OpenWRT源码中给出的路由器型号较少，经常不能满足实际的需求，这里所说的不能满足的要求体现在了两点，第一为默认的路由器RAM容量与实际的不符合，第二为默认的路由器Flash容量与实际的不一致。本文章以MT7688芯片为例，增加一个基于此芯片的路由器选项，具体的配置为Flash 32M; RAM 128M。
+
+
+一. 编写对应的.dts文件
+在OpenWRT源码目录〜/ openwrt / target / linux / rampis / dts中，存放着.dtsi和对应的.dts文件，MT7688对应的.dtsi文件为 mt7628an.dtsi, 源码里的Target Profile ------> 有默认选项、LinkIt7688两个，LinkIt7688在〜/ openwrt / target / linux / rampis / dts中对应的dts文件为 LINKIT7688.dts,模仿它的dts文件写法在新建一个 XiaoYin32128.dts 文件，其中的内容如下：
+
+/dts-v1/;
+ 
+/include/ "mt7628an.dtsi"
+ 
+/ {
+	compatible = "mediatek,XiaoYin", "mediatek,mt7628an-soc";
+	model = "XiaoYin";
+ 
+	chosen {
+		bootargs = "console=ttyS0,57600";
+	};
+ 
+	memory@0 {
+		device_type = "memory";
+		reg = <0x0 0x8000000>;
+	};
+ 
+	pinctrl {
+		state_default: pinctrl0 {
+			gpio {
+				ralink,group = "gpio","perst", "refclk","spis","wled_an","ephy_p0","ephy_p1","ephy_p2","ephy_p3","ephy_p4","wdt";
+				ralink,function = "gpio";
+			};
+			
+			uart2 {
+				ralink,group = "uart2";
+				ralink,function = "uart2";
+			};
+			
+			uart1 {
+				ralink,group = "uart1";
+				ralink,function = "uart1";
+			};
+ 
+			uart0 {
+				ralink,group = "uart0";
+				ralink,function = "uart0";
+			};
+			
+			i2c {
+				ralink,group = "i2c";
+				ralink,function = "i2c";
+			};
+		};
+	};
+ 
+	palmbus@10000000 {
+		spi@b00 {
+			status = "okay";
+ 
+			pinctrl-names = "default";
+			pinctrl-0 = <&spi_pins>, <&spi_cs1_pins>;
+ 
+			m25p80@0 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				compatible = "w25q256";
+				reg = <0 0>;
+				linux,modalias = "m25p80", "w25q256";
+				spi-max-frequency = <40000000>;
+				m25p,chunked-io = <31>;
+ 
+				partition@0 {
+					label = "u-boot";
+					reg = <0x0 0x30000>;
+					read-only;
+				};
+ 
+				partition@30000 {
+					label = "u-boot-env";
+					reg = <0x30000 0x10000>;
+				};
+ 
+				factory: partition@40000 {
+					label = "factory";
+					reg = <0x40000 0x10000>;
+				};
+ 
+				partition@50000 {
+					label = "firmware";
+					reg = <0x50000 0x1fb0000>; 
+				};
+			};
+ 
+			spidev@1 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				compatible = "spidev";
+				reg = <1 0>;
+				spi-max-frequency = <40000000>;
+			};
+		};
+ 
+		i2c@900 {
+			status = "okay";
+		};
+ 
+		uart1@d00 {
+			status = "okay";
+		};
+ 
+		uart2@e00 {
+			status = "okay";
+		};
+ 
+		pwm@5000 {
+			status = "okay";
+		};
+	};
+ 
+	ethernet@10100000 {
+		mtd-mac-address = <&factory 0x28>;
+	};
+	
+	
+	gpio-leds {
+		compatible = "gpio-leds";
+ 
+		sys {
+			label = "sys";
+			gpios = <&gpio1 9 0>;
+			default-state = "off";
+		};
+ 
+		wifi {
+			label = "wifi";
+			gpios = <&gpio1 12 0>;
+			default-state = "off";
+		};
+ 
+		wan {
+			label = "wan";
+			gpios = <&gpio1 11 0>;
+			default-state = "off";
+		};
+ 
+		zpower {
+			label = "zpower";
+			gpios = <&gpio1 10 0>;
+			default-state = "off";
+		};
+	};
+ 
+	gpio-keys-polled {
+			compatible = "gpio-keys-polled";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			poll-interval = <20>;
+			reset {
+					label = "reset";
+					gpios = <&gpio1 6 1>;
+					linux,code = <0x198>;
+			};
+	};
+};
+  在上述的内容中其中两点需要特别注意，其一是设置RAM大小
+
+	memory@0 {
+		device_type = "memory";
+		//reg = <0x0 0x4000000>; //64MB
+		reg = <0x0 0x8000000>; //128MB
+	};
+ 
+
+reg = <0x0 0x8000000>; 代表设置的RAM大小为128M
+
+其二是设置Flash大小
+
+				partition@50000 {
+					label = "firmware";
+					//reg = <0x50000 0x07b0000>; //8MB
+					reg = <0x50000 0x1fb0000>; //32MB
+				};
+reg = <0x50000 0x1fb0000>; 代表设置的Flash大小为32MB 
+
+二. 修改Makefile文件
+该Makefile文件存放在 ～/openwrt/target/linux/ramips/image 中，在MT7688位置编辑输入如下的内容：
+
+Image/Build/Profile/MT7688=$(call BuildFirmware/Default4M/$(1),$(1),mt7628,MT7628)
+Image/Build/Profile/LinkIt7688=$(call BuildFirmware/Default32M/$(1),$(1),LinkIt7688,LINKIT7688)
+ 
+Image/Build/Profile/XiaoYin0864=$(call BuildFirmware/Default8M/$(1),$(1),XiaoYin0864,XiaoYin0864)
+Image/Build/Profile/XiaoYin1664=$(call BuildFirmware/Default16M/$(1),$(1),XiaoYin1664,XiaoYin1664)
+Image/Build/Profile/XiaoYin32128=$(call BuildFirmware/Default32M/$(1),$(1),XiaoYin32128,XiaoYin32128)
+ 
+ifeq ($(SUBTARGET),mt7628)
+define Image/Build/Profile/Default
+	$(call Image/Build/Profile/MT7688,$(1))
+	$(call Image/Build/Profile/LinkIt7688,$(1))
+	
+	$(call Image/Build/Profile/XiaoYin0864,$(1))
+	$(call Image/Build/Profile/XiaoYin1664,$(1))
+	$(call Image/Build/Profile/XiaoYin32128,$(1))
+endef
+endif
+三. 增加 02-XiaoYin32128.mk 文件
+在～/openwrt/target/linux/ramips/mt7688/profiles 目录下添加 02-XiaoYin32128.mk文件，文件内容如下：
+
+define Profile/XiaoYin32128
+	NAME:=YinYun XiaoYin 32MB flash/128MB RAM
+	PACKAGES:=\
+	kmod-usb-core kmod-usb2 kmod-usb-ohci \
+	kmod-ledtrig-netdev kmod-ledtrig-usbdev kmod-ledtrig-gpio kmod-ledtrig-heartbeat \
+	mountd \
+	uhttpd rpcd rpcd-mod-iwinfo \
+	kmod-fs-vfat kmod-fs-exfat kmod-fs-ext4 block-mount e2fsprogs \
+	kmod-nls-base kmod-nls-cp437 kmod-nls-iso8859-1 kmod-nls-utf8 kmod-usb-storage \
+	mtk-wifi airkiss webui ated luci reg maccalc \
+	gateway luci-i18n-base-zh-cn \
+	mtk-mt76x8-linkwatch
+endef
+ 
+ 
+define Profile/XiaoYin32128/Config
+	select LUCI_LANG_zh-cn
+endef
+ 
+ 
+define Profile/XiaoYin32127/Description
+	YinYun 32MB flash/128MB ram base packages.
+endef
+ 
+$(eval $(call Profile,XiaoYin32128))
+四.验证测试
+首先删除～/openwrt/tmp/ 文件夹内的内容，输入 make menuconfig 命令在Target Profile ------> 中即可看到上面添加的选项.
+
+转自：https://blog.csdn.net/liule5211314/article/details/85230468 
